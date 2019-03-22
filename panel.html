@@ -5,8 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Panel logowania</title>
+    <style>
+    @font-face {
+        font-family: doswin;
+        src: url(Inconsolata.otf);
+        }
+    * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    body {
+        overflow: hidden;
+    }
+    #main{
+        background-color: black;
+        color:white;
+        width: 100%;
+        height: 105vh;
+        outline: none;
+        resize: none;
+        overflow: auto;
+        font-size: 20px;
+        font-family: doswin
+    }
+    
+    </style>
 </head>
 <body>
-    
+    <div>
+        <textarea autofocus spellcheck="false" name="box" id="main" onclick="start()"></textarea>
+    </div>
+   
+    <script>
+        document.getElementById("main").innerHTML = "System autodestrukcji uruchomiony.\n\nJeśli chcesz anulować - Podaj hasło: ";
+        var input = document.getElementById("main");
+        
+        input.addEventListener("keyup", function(event){
+            if (event.keyCode === 13){
+                var n = input.value.indexOf("mela");
+                if (n == -1){
+                    input.value = input.value + "\nHasło niepoprawne!\nJeśli chcesz anulować - Podaj hasło: "    
+                }else{
+                    var timesRun = 0;
+                    var interval = setInterval(function(){
+                        timesRun += 1;
+                        input.value = input.value + Math.floor(Math.random() * 10);
+                        if(timesRun === 20){
+                        clearInterval(interval);
+                        input.value = input.value + "\n\nAutodestrukcja anulowana!";
+                        }
+                    }, 100);
+                    
+                };
+            };
+
+        });
+
+
+    </script>
 </body>
 </html>
