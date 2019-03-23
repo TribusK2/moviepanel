@@ -7,7 +7,7 @@
     <title>Panel logowania</title>
     <style>
     @font-face {
-        font-family: doswin;
+        font-family: myfont;
         src: url(Inconsolata.otf);
         }
     * {
@@ -27,35 +27,36 @@
         resize: none;
         overflow: auto;
         font-size: 20px;
-        font-family: doswin
-    }
-    
+        font-family: myfont;
+    } 
     </style>
 </head>
 <body>
     <div>
         <textarea autofocus spellcheck="false" name="box" id="main" onclick="start()"></textarea>
     </div>
-   
+    
     <script>
-        document.getElementById("main").innerHTML = "System autodestrukcji uruchomiony.\n\nJeśli chcesz anulować - Podaj hasło: ";
+        document.getElementById("main").innerHTML = "Podaj hasło: ";
         var input = document.getElementById("main");
         
         input.addEventListener("keyup", function(event){
             if (event.keyCode === 13){
                 var n = input.value.indexOf("mela");
                 if (n == -1){
-                    input.value = input.value + "\nHasło niepoprawne!\nJeśli chcesz anulować - Podaj hasło: "    
+                    input.value = input.value + "\nHasło nieprawidłowe!\nPodaj hasło: "    
                 }else{
                     var timesRun = 0;
+                    input.value = "";
                     var interval = setInterval(function(){
                         timesRun += 1;
-                        input.value = input.value + Math.floor(Math.random() * 10);
-                        if(timesRun === 20){
+                        
+                        input.value += Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10);
+                        if(timesRun === 200){
                         clearInterval(interval);
                         input.value = input.value + "\n\nAutodestrukcja anulowana!";
                         }
-                    }, 100);
+                    }, 10);
                     
                 };
             };
