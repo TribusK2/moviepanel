@@ -15,7 +15,7 @@
         padding: 0;
         border: 0;
         cursor: none;
-        background-color: #001a08;
+        background-color: #01290d;
     }
     body {
         overflow: hidden;
@@ -24,12 +24,26 @@
         text-align: center;
         padding: 0;
         margin: 0;
+        position: relative;
+    }
+    #per {
+        position: absolute;
+        width: 50vw;
+        left: 25vw;
+        top: 21vh;
+        background: none;
+    }
+    #percent {
+        position: relative;
+        height: 100px;
+        width: 260px;
+        margin: auto;
     }
     .are{
-        background-color: #001a08;
+        background-color: #01290d;
         color: #f8ffcd;
-        width: 75%;
-        height: 85vh;
+        width: 95%;
+        height: 20vh;
         outline: none;
         resize: none;
         overflow: hidden;
@@ -37,70 +51,72 @@
         font-family: myfont;
         cursor: none;
         text-align: center;
-        padding: 50px 0;
         margin: 0;
+        position: relative;
     }
-    #next{
-        background-color: #001a08;
-        height: 80px;
+    #backNum{
+        text-align: justify; 
+    }
+    #percentNum{
+        width: 230px;
+        height: 30px;
+        position: relative;
+        z-index: 1;
         padding: 0;
+        margin: auto;
+        top: 12px;
+        display: block;
     }
+    #percentBar{
+        width: 230px;
+        height: 30px;
+        border: 2px solid #f8ffcd;
+        position: relative;
+        z-index: 1;
+        padding: 0;
+        top: 26px;
+        color: red;
+    }
+
+    
+
     </style>
 </head>
 <body>
+   
     <div class="centred">
-        <textarea autofocus spellcheck="false" name="box" id="main" class="are"></textarea>
-    </div>
-    <div class="centred" id="alertBox">
-        
+        <!-- backgroud numbers -->
+        <textarea autofocus spellcheck="false" name="box1" id="backNum" class="are"></textarea> 
+        <div id="per" class="centred">
+            <div id="percent" class="centred">
+                <!-- percent number -->
+                <textarea autofocus spellcheck="false" name="box2" id="percentNum" class="are">93%</textarea>
+                <!-- percent bar -->
+                <textarea autofocus spellcheck="false" name="box2" id="percentBar" class="are">|||||||||||||||||   </textarea>
+            </div>
+        </div>    
     </div>
    <script>
-        // Esc action
-        var input = document.getElementById("main");
+        // q action
+        var input = document.getElementById("backNum");
         input.addEventListener("keyup", function(start){
-            if (event.keyCode === 27){
-                var alertDiv = document.getElementById("next");
-                if (alertDiv != null){
-                    alertDiv.parentElement.removeChild(alertDiv);
-                };
-                input.style.textAlign = "center";
-                input.style.height = "85vh";
-                input.value = "Podaj hasło:\n"
+            if (event.keyCode === 48){
+                var timesRun = 0;
+                input.value = "0";
+                var interval = setInterval(function(){
+                    timesRun += 1;
+                    input.value += Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +"";
+                    input.scrollTop = input.scrollHeight;
+                    if(timesRun === 40000){
+                        clearInterval(interval)
+                    }
+                }, 50);
             };
         });
 
-        // Enter action
-        input.addEventListener("keyup", function(event){
-            if (event.keyCode === 13){
-                var ntext = input.value;
-                var nup = ntext.toUpperCase();
-                var n = nup.indexOf("IWO");
-                if (n == -1){
-                    input.value = input.value + "\nHasło nieprawidłowe!\nPodaj hasło:\n";
-                }else{
-                    var timesRun = 0;
-                    input.style.textAlign = "justify";
-                    input.style.height = "180px";
-                    input.value = "";
-                    var interval = setInterval(function(){
-                        timesRun += 1;
-                        input.value += Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10) +""+ Math.floor(Math.random() * 10);
-                        if(timesRun === 210){
-                        clearInterval(interval);
-                        var alertDiv = document.getElementById("alertBox");
-                        var area =  document.createElement("textarea");
-                        area.classList.add("are");
-                        area.id = "next";
-                        alertDiv.appendChild(area);
-                        area.value = "\nAutodestrukcja anulowana!";
-                        }
-                    }, 10);
-                };
-            };
-        });
-        window.onload = function() {
-            document.getElementById("main").focus();
-        };
+        // Esc action
+
+
     </script>
 </body>
 </html>
