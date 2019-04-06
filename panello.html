@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Panel logowania</title>
+    <title>F5-Refresh; F11-Fullscreen;</title>
     <style>
     @font-face {
         font-family: myfont;
@@ -15,7 +15,7 @@
         padding: 0;
         border: 0;
         cursor: none;
-        background-color: #01290d;
+        background-color: #061f0d;
     }
     body {
         overflow: hidden;
@@ -23,27 +23,27 @@
     .centred{
         text-align: center;
         padding: 0;
-        margin: 0;
+        margin: 0 auto;
         position: relative;
     }
     #per {
-        position: absolute;
-        width: 50vw;
-        left: 25vw;
-        top: 21vh;
+        width: 70vw;
+        top: 10px;
         background: none;
+        margin: auto;
+        display: none;
     }
     #percent {
         position: relative;
         height: 100px;
-        width: 260px;
+        width: 360px;
         margin: auto;
     }
     .are{
-        background-color: #01290d;
+        background-color: #061f0d;
         color: #f8ffcd;
         width: 95%;
-        height: 20vh;
+        height: 150px;
         outline: none;
         resize: none;
         overflow: hidden;
@@ -51,11 +51,15 @@
         font-family: myfont;
         cursor: none;
         text-align: center;
-        margin: 0;
+        margin: auto;
         position: relative;
     }
+    #numberDiv{
+        height: 150px;
+    }
     #backNum{
-        text-align: justify; 
+        text-align: justify;
+        display: none;
     }
     #percentNum{
         width: 230px;
@@ -68,17 +72,64 @@
         display: block;
     }
     #percentBar{
-        width: 230px;
+        width: 330px;
         height: 30px;
         border: 2px solid #f8ffcd;
         position: relative;
         z-index: 1;
         padding: 0;
         top: 26px;
-        color: red;
+        background-color: black;
+        text-align: left;
+    }
+    #pasWindow{
+        position: relative;
+        height: 150px;
+        width: 380px;
+        margin: auto;
+        top: 20px;
+        color: #f8ffcd;
+        font-family: myfont;
+        font-size: 20px;
+        margin: 50px auto;
+        border: 2px solid #f8ffcd;
+        display: none;
     }
 
-    
+    #pasText{
+        position: relative;
+        width: 290px;
+        top: -15px;
+        margin: auto;
+        text-align: center;
+    }
+    #pasFailedDiv{
+        position: relative;
+        top: -10px;
+        height: 30px;
+    }
+    #pasFailed{
+        color: red;
+        display: none;
+    }
+    #pasBox {
+        position: relative;
+        width: 200px;
+        height: 20px;
+        padding-top: 20px;
+        background-color: black;
+        border: 2px solid #f8ffcd;  
+        line-height: 1px; 
+    }
+    #pasLes{
+        margin-top: 5px;
+        display: none;
+    }
+    #progres{
+        background-color: black;
+    }
+   
+
 
     </style>
 </head>
@@ -86,36 +137,137 @@
    
     <div class="centred">
         <!-- backgroud numbers -->
-        <textarea autofocus spellcheck="false" name="box1" id="backNum" class="are"></textarea> 
+        <div id="numberDiv">
+            <textarea spellcheck="false" name="box1" id="backNum" class="are"></textarea> 
+        </div>
+
+        <!-- percent window -->
         <div id="per" class="centred">
             <div id="percent" class="centred">
-                <!-- percent number -->
-                <textarea autofocus spellcheck="false" name="box2" id="percentNum" class="are">93%</textarea>
-                <!-- percent bar -->
-                <textarea autofocus spellcheck="false" name="box2" id="percentBar" class="are">|||||||||||||||||   </textarea>
+                <p spellcheck="false" name="box2" id="percentNum" class="are"><span id="percentValue">93</span>%</p>
+                <p spellcheck="false" name="box2" id="percentBar" class="are"><span id="progres">|||||||||||||||||||||||</span></p>
             </div>
-        </div>    
+        </div>
+        
+        <!-- password window -->
+        <div id="pasWindow" class="centred">
+            <div id="pasText">
+                <p>Aby anulować podaj hasło!</p>  
+            </div>
+            <div id="pasFailedDiv">
+                <p id="pasFailed">Błędne hasło!</p> 
+            </div>
+            
+            <textarea autofocus spellcheck="false" name="box2" id="pasBox" class="are"></textarea>
+            <p id="pasLes">Pozostały: <span id="pasCount">4</span> próby!</p> 
+        </div>
+        
+        
     </div>
    <script>
-        // q action
-        var input = document.getElementById("backNum");
-        input.addEventListener("keyup", function(start){
+        var per = document.getElementById("per");
+        var backNum = document.getElementById("backNum");
+        var pasWindow = document.getElementById("pasWindow");
+        var pasBox = document.getElementById("pasBox")
+        var pasFailed = document.getElementById("pasFailed");
+        var percentBar = document.getElementById("percentBar");
+        var percentValue = document.getElementById("percentValue");
+        var pasLes = document.getElementById("pasLes");
+        var pasCount = document.getElementById("pasCount");
+        var progres = document.getElementById("progres");
+
+        var timesRun = 0;
+        function starNumber(){
+            var int = setInterval(function(){
+                timesRun += 1;
+                backNum.value += Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +"";
+                backNum.scrollTop = backNum.scrollHeight;
+            }, 50)
+        };
+        function startBlinkGreen(){
+            var blinkgreen = setInterval(function(){
+                progres.style.display = "none";
+                setTimeout(function(){
+                    progres.style.display = "block";
+                }, 300);
+            },1000);
+            setTimeout(function(){
+                clearInterval(blinkgreen);
+            }, 10000);
+        };
+        function startBlinkRed(){
+            var blinkred = setInterval(function(){
+                pasFailed.style.display = "none";
+                pasLes.style.display = "none";
+                setTimeout(function(){
+                    pasFailed.style.display = "block";
+                    pasLes.style.display = "block";
+                }, 100);
+            },300)
+        };
+        
+        document.addEventListener("keydown", function(start){
+            // 0 action
             if (event.keyCode === 48){
-                var timesRun = 0;
-                input.value = "0";
-                var interval = setInterval(function(){
-                    timesRun += 1;
-                    input.value += Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +""+Math.floor(Math.random() * 10) +"";
-                    input.scrollTop = input.scrollHeight;
-                    if(timesRun === 40000){
-                        clearInterval(interval)
-                    }
-                }, 50);
+                per.style.display = "block";
+                backNum.style.display = "inline-block";
+                starNumber();
+            };
+            // Esc action
+            if (event.keyCode === 27){
+                pasWindow.style.display = "none";
+                pasWindow.style.display = "block";
+                pasBox.value = null;
+                pasBox.focus();
+            };
+            // Enter action
+            if (event.keyCode === 13){
+                var password = pasBox.value;
+                var passwordUp = password.toUpperCase();
+                var p = passwordUp.indexOf("IWO");
+                if (p == -1){
+                    pasFailed.style.display = "block";
+                    pasLes.style.display = "block";
+                    progres.innerHTML += "|";
+                    percentValue.innerHTML = +percentValue.innerHTML + 1;
+                    if (pasCount.innerHTML == 2){
+                        pasLes.innerHTML = "Pozostała: 1 próba!";
+                        pasLes.style.color = "red";
+                        percentBar.style.color = "red";
+                    }else{
+                        pasCount.innerHTML = pasCount.innerHTML - 1;
+                    };
+                }else{
+                    pasFailed.style.display = "block";
+                    pasLes.style.display = "block";
+                    pasFailed.innerHTML = "Hasło prawidłowe!"
+                    pasLes.innerHTML = "Autodestrukcja anulowana!";
+                    percentBar.style.color = "green";
+                    pasFailed.style.color = "green";
+                    pasLes.style.color = "green";
+                    pasBox.value = null;
+                    backNum.style.display = "none";
+                    startBlinkGreen();
+                    setTimeout(function(){
+                        backNum.style.display = "inline-block";
+                        percentBar.style.color = "red";
+                        pasLes.style.color = "red";
+                        pasFailed.style.color = "red";
+                        pasFailed.innerHTML = "Błąd! Błąd! Błąd!";
+                        startBlinkRed();
+                        pasLes.innerHTML = "Autodestrukcja wznowiona!";
+                        progres.innerHTML += "|";
+                        percentValue.innerHTML = +percentValue.innerHTML + 1;
+                    },10000)
+                };
+                pasBox.value = null;
+            };
+            // Arrow right action
+            if (event.keyCode === 39){
+                progres.innerHTML += "|";
+                percentValue.innerHTML = +percentValue.innerHTML + 1;
             };
         });
-
-        // Esc action
-
 
     </script>
 </body>
