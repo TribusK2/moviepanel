@@ -16,6 +16,8 @@
         border: 0;
         cursor: none;
         background-color: #061f0d;
+        filter: blur(0.3px);
+        -webkit-filter: blur(0.3px);
     }
     body {
         overflow: hidden;
@@ -193,7 +195,7 @@
             },1000);
             setTimeout(function(){
                 clearInterval(blinkgreen);
-            }, 10000);
+            }, 4000);
         };
         function startBlinkRed(){
             var blinkred = setInterval(function(){
@@ -240,28 +242,32 @@
                 }else{
                     pasFailed.style.display = "block";
                     pasLes.style.display = "block";
-                    pasFailed.innerHTML = "Hasło prawidłowe!"
-                    pasLes.innerHTML = "Autodestrukcja anulowana!";
+                    pasFailed.innerHTML = "Hasło prawidłowe!";
+                    pasLes.innerHTML = "Proces anulowany!";
                     percentBar.style.color = "green";
                     pasFailed.style.color = "green";
                     pasLes.style.color = "green";
                     pasBox.value = null;
                     backNum.style.display = "none";
                     startBlinkGreen();
-                    setTimeout(function(){
-                        backNum.style.display = "inline-block";
-                        percentBar.style.color = "red";
-                        pasLes.style.color = "red";
-                        pasFailed.style.color = "red";
-                        pasFailed.innerHTML = "Błąd! Błąd! Błąd!";
-                        startBlinkRed();
-                        pasLes.innerHTML = "Autodestrukcja wznowiona!";
-                        progres.innerHTML += "|";
-                        percentValue.innerHTML = +percentValue.innerHTML + 1;
-                    },10000)
                 };
                 pasBox.value = null;
             };
+
+            // Arrow down action
+            if (event.keyCode === 40){
+
+                backNum.style.display = "inline-block";
+                percentBar.style.color = "red";
+                pasLes.style.color = "red";
+                pasFailed.style.color = "red";
+                startBlinkRed();
+                pasFailed.innerHTML = "Błąd! Błąd! Błąd!";
+                pasLes.innerHTML = "Proces wznowiony!";
+                progres.innerHTML += "|";
+                percentValue.innerHTML = +percentValue.innerHTML + 1;
+            };
+                
             // Arrow right action
             if (event.keyCode === 39){
                 progres.innerHTML += "|";
